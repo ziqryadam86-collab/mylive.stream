@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Stream</title>
+</head>
+<body>
+<script>
+    // Ambil parameter ?stream= dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const streamCode = urlParams.get('stream');
+
+    // Kandungan m3u8 live nbcuni anda
+    const m3u8Content = `#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=500000,RESOLUTION=1920x1080\nhttps://xumo-drct-nbcnn-ir8ze.fast.nbcuni.com/live/master.m3u8`;
+
+    // Kalau kod sama dengan afjav173718j9
+    if (streamCode === 'afjav173718j9') {
+        // Trik rahsia: Tukar teks m3u8 menjadi fail download layang (Blob)
+        const blob = new Blob([m3u8Content], { type: 'application/x-mpegURL' });
+        const streamUrl = URL.createObjectURL(blob);
+        
+        // Paksa VLC atau browser terus baca kandungan fail m3u8 tu
+        window.location.href = streamUrl;
+    } else {
+        document.body.innerHTML = "<h3>Stream tidak dijumpai atau kod salah.</h3>";
+    }
+</script>
+</body>
+</html>
+  
