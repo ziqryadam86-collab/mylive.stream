@@ -1,0 +1,33 @@
+name: Generate TV9 MPD
+
+on:
+  schedule:
+    - cron: '*/6 * * * *'  # Jalan automatik setiap 6 minit
+  workflow_dispatch:      # Boleh picit manual bila-bila masa
+
+jobs:
+  build-mpd:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # Kebenaran untuk push fail ke repo
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: pip install requests
+        
+      - name: Run Python Script
+        run: python update-tv9-live.py
+        
+      - name: Commit & Push tv9.mpd
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "bot@github.com"
+          git add tv9.mpd
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update tv9.mpd" && git push)
+          
